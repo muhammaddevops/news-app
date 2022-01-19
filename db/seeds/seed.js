@@ -30,8 +30,8 @@ const seed = (data) => {
       return db.query(`
       CREATE TABLE users (
         username VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
-        avatar_url VARCHAR(550) NOT NULL,
-        name VARCHAR(550) NOT NULL
+        avatar_url TEXT NOT NULL,
+        name VARCHAR(225) NOT NULL
       );`);
     })
     .then(() => {
@@ -43,7 +43,7 @@ const seed = (data) => {
           votes INT DEFAULT 0,
           topic VARCHAR(255) REFERENCES topics(slug),
           author VARCHAR(255) NOT NULL REFERENCES users(username),
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );`);
     })
     .then(() => {
@@ -53,7 +53,7 @@ const seed = (data) => {
           author VARCHAR(255) NOT NULL REFERENCES users(username),
           article_id INT REFERENCES articles(article_id),
           votes INT DEFAULT 0,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
           body TEXT NOT NULL
         );`);
     })
