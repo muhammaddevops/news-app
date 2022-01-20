@@ -1,6 +1,6 @@
-//change comments ref of topic to article_id
+//This template can swap values to join tables based on foreign keys. The example below creates an object with a key "topic" and a value "article_id".
 
-exports.createArticleIdRef = (formattedArticles) => {
+createArticleIdRef = (formattedArticles) => {
   const ref = {};
   formattedArticles.forEach((article) => {
     ref[article.topic] = article.article_id;
@@ -23,13 +23,13 @@ const testArticleObject = [
 
 // createArticleIdRef(testArticleObject);
 
-exports.formattedComments = (commentData, articleIds) => {
+formattedComments = (commentData, articleIds) => {
   return commentData.map((comment) => {
     return [
       comment.body,
       comment.votes,
       comment.author,
-      comment.article_id,
+      articleIds[commentData.topic],
       comment.created_at,
     ];
   });

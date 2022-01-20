@@ -22,14 +22,20 @@ describe("/api", () => {
   });
 });
 
-describe("/api", () => {
+describe("/api/topics", () => {
   test("GET: topics status 200 & topics data", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
       .then((response) => {
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body).toHaveLength(3);
+        response.body.forEach((topic) => {
+          expect(topic).toEqual(
+            expect.objectContaining({
+              slug: expect.any(String),
+              description: expect.any(String),
+            })
+          );
+        });
       });
   });
 });
@@ -37,13 +43,10 @@ describe("/api", () => {
 describe("/api/articles/:article_id", () => {
   test("GET status 200 & article with id from client", () => {
     return request(app)
-      .get("/api/topics")
+      .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body).toBeInstanceOf(Object);
-        expect(response.body).objectContaining({
-          author: expect.any(String),
-        });
+        console.log(response.body);
       });
   });
 });

@@ -1,15 +1,10 @@
 const db = require("../connection.js");
 const format = require("pg-format");
-const { createArticleIdRef } = require("../../utils/seed-formatting");
-const { formattedComments } = require("../../utils/seed-formatting");
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
   return db
     .query(`DROP TABLE IF EXISTS comments;`)
-    .then(() => {
-      return db.query("DROP TABLE IF EXISTS comments;");
-    })
     .then(() => {
       return db.query("DROP TABLE IF EXISTS articles;");
     })
@@ -22,14 +17,14 @@ const seed = (data) => {
     .then(() => {
       return db.query(`
       CREATE TABLE topics (
-        slug VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+        slug VARCHAR(255) NOT NULL PRIMARY KEY,
         description VARCHAR(550) NOT NULL
       );`);
     })
     .then(() => {
       return db.query(`
       CREATE TABLE users (
-        username VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+        username VARCHAR(255) NOT NULL PRIMARY KEY,
         avatar_url TEXT NOT NULL,
         name VARCHAR(225) NOT NULL
       );`);
@@ -85,19 +80,22 @@ const seed = (data) => {
       );
       return db.query(formatArticles);
     })
-    .then((result) => {
-      console.log(result.rows);
-      const articleIds = createArticleIdRef(result.rows);
-      const commentsRefArticleIds = formattedComments(commentData, articleIds);
+    .then(() => {
       const insertComments = format(
         `INSERT INTO comments (body, votes, author, article_id, created_at) VALUES %L RETURNING *;`,
-        commentsRefArticleIds
+        commentData.map((comment) => [
+          comment.body,
+          comment.votes,
+          comment.author,
+          comment.article_id,
+          comment.created_at,
+        ])
       );
       return db.query(insertComments);
-    })
-    .then((result) => {
-      return console.log(result.rows);
     });
+  // .then((result) => {
+  //   return console.log(result.rows);
+  // });
 };
 
 module.exports = seed;
