@@ -21,6 +21,7 @@ exports.getArticleById = (req, res, next) => {
   selectArticleById(articleId)
     .then((article) => {
       if (article) {
+        console.log(article);
         res.status(200).send({ article });
       } else {
         return Promise.reject({ status: 404, msg: "Not found" });
