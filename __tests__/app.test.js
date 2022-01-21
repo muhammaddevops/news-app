@@ -46,6 +46,7 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
+        console.log(response.body.article);
         expect(response.body.article).toEqual(
           expect.objectContaining({
             article_id: expect.any(Number),
@@ -76,6 +77,18 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.article).toMatchObject({
           votes: 100 + patchVotes.inc_votes,
         });
+      });
+  });
+});
+
+describe.only("/api/articles?(...anyQuery)", () => {
+  test("GET status 200 & correct articles from client queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&&order=ASC")
+      .expect(200)
+      .then((response) => {
+        console.log(response.body.articles);
+        expect(response.body.articles).toBeSortedBy("title");
       });
   });
 });

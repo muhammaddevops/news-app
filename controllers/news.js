@@ -46,7 +46,6 @@ exports.patchArticleById = (req, res, next) => {
   updateArticleById(articleId, inc_votes)
     .then((article) => {
       if (article) {
-        // console.log(article);
         res.status(200).send({ article });
       } else {
         return Promise.reject({ status: 404, msg: "Not found" });
@@ -56,9 +55,12 @@ exports.patchArticleById = (req, res, next) => {
 };
 
 exports.getQueryArticles = (req, res, next) => {
-  const { sort_by } = req.query;
-  const { order } = req.query;
-  const { topic } = req.query;
+  const { sort_by, order, topic } = req.query;
 
-  selectQueryArticles(sort_by, order, topic);
+  selectQueryArticles(sort_by, order, topic)
+    .then((articles) => {
+      console.log(articles);
+      res.status(200).send({ articles });
+    })
+    .catch((err) => next(err));
 };
