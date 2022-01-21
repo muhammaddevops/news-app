@@ -93,9 +93,6 @@ const seed = (data) => {
       );
       return db.query(insertComments);
     });
-  // .then((result) => {
-  //   return console.log(result.rows);
-  // });
 };
 
 module.exports = seed;

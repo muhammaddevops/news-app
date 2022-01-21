@@ -81,14 +81,29 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe.only("/api/articles?(...anyQuery)", () => {
-  test("GET status 200 & correct articles from client queries", () => {
+describe("/api/articles?(...anyQuery)", () => {
+  test("GET status 200 & correct articles from multiple client queries", () => {
     return request(app)
       .get("/api/articles?sort_by=title&&order=ASC")
       .expect(200)
       .then((response) => {
         console.log(response.body.articles);
         expect(response.body.articles).toBeSortedBy("title");
+      });
+  });
+});
+
+describe.only("/api/articles?topicQuery", () => {
+  test("GET status 200 & correct articles from client topic queries", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        expect(res.body.articles).toHaveLength(1);
+        expect(res.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
 });

@@ -62,12 +62,12 @@ exports.selectQueryArticles = (
     FROM articles
     JOIN comments ON articles.article_id = comments.article_id`;
 
-    sqlString += ` GROUP BY articles.article_id`;
-
     if (topic) {
       queryValues.push(topic);
       sqlString += ` WHERE topic ILIKE %L`;
     }
+
+    sqlString += ` GROUP BY articles.article_id`;
 
     if (sort_by === "title") {
       queryValues.push(`title`);
