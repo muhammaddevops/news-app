@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 
 exports.selectTopics = () => {
   return db.query(`SELECT * FROM topics;`).then((result) => {
@@ -23,4 +24,42 @@ exports.selectArticleById = (articleId) => {
       [articleId]
     )
     .then((result) => result.rows[0]);
+};
+
+exports.updateArticleById = (articleId, votes) => {
+  if (typeof votes !== "number") {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  } else {
+    let queryValues = [[votes], [articleId]];
+    let sqlString = `UPDATE articles SET votes = votes + %L
+                  WHERE article_id = %L RETURNING *;`;
+
+    const queryString = format(sqlString, ...queryValues);
+
+    return db.query(queryString).then((results) => {
+      return results.rows[0];
+    });
+  }
+};
+
+exports.selectQueryArticles = (
+  sort_by = "created_at",
+  order = "DESC",
+  topic = "*"
+) => {
+  const allowedSortBys = [
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+  ];
+  const allowedOrder = ["ASC", "DESC"];
+  if (!allowedSortBys.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+  if (!allowedOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
 };

@@ -61,3 +61,21 @@ describe("/api/articles/:article_id", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id", () => {
+  test("PATCH: update articles votes with new votes object. Custom error failure if votes are not a number", () => {
+    const patchVotes = {
+      inc_votes: 10,
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(patchVotes)
+      .expect(200)
+      .then((response) => {
+        console.log(response.body.article);
+        expect(response.body.article).toMatchObject({
+          votes: 100 + patchVotes.inc_votes,
+        });
+      });
+  });
+});
