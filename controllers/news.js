@@ -60,7 +60,11 @@ exports.getQueryArticles = (req, res, next) => {
   selectQueryArticles(sort_by, order, topic)
     .then((articles) => {
       console.log(articles);
-      res.status(200).send({ articles });
+      if (articles.length > 0) {
+        res.status(200).send({ articles });
+      } else {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
     })
     .catch((err) => next(err));
 };

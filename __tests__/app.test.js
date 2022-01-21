@@ -93,7 +93,7 @@ describe("/api/articles?(...anyQuery)", () => {
   });
 });
 
-describe.only("/api/articles?topicQuery", () => {
+describe("/api/articles?topicQuery", () => {
   test("GET status 200 & correct articles from client topic queries", () => {
     return request(app)
       .get("/api/articles?topic=cats")
@@ -106,4 +106,37 @@ describe.only("/api/articles?topicQuery", () => {
         });
       });
   });
+  test.only("GET: status 400 & error message invalid topic", () => {
+    return request(app)
+      .get("/api/articles?topic=invalid")
+      .expect(404)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.msg).toBe("Not found");
+      });
+  });
+  test("GET: status 400 & error message invalid sort_by", () => {
+    return request(app)
+      .get("/api/articles?sort_by=invalid")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Not found");
+      });
+  });
+  // test("GET: status 400 & error message invalid topic", () => {
+  //   return request(app)
+  //     .get("/api/articles?topic=invalid")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Bad request");
+  //     });
+  // });
+  // test("GET: status 400 & error message invalid topic", () => {
+  //   return request(app)
+  //     .get("/api/articles?topic=invalid")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Bad request");
+  //     });
+  // });
 });
