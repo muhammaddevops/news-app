@@ -104,3 +104,16 @@ exports.selectQueryArticles = (
     });
   }
 };
+
+exports.selectCommentsByArticleId = (articleId) => {
+  let sqlString = `SELECT comments.* FROM comments WHERE article_id = %L`;
+  let queryValues = [articleId];
+
+  const queryString = format(sqlString, ...queryValues);
+
+  return db.query(queryString).then((result) => {
+    return result.rows;
+  });
+};
+
+exports.postCommentByArticleId = (articleId, comment) => {};

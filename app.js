@@ -7,6 +7,8 @@ const {
   getArticleById,
   patchArticleById,
   getQueryArticles,
+  getCommentsByArticleId,
+  postCommentByArticleId,
 } = require("./controllers/news.js");
 
 app.use(express.json());
@@ -17,6 +19,10 @@ app.get("/api/articles/:articleId", getArticleById);
 
 app.patch("/api/articles/:articleId", patchArticleById);
 app.get("/api/articles", getQueryArticles);
+
+app.get("/api/articles/:articleId/comments", getCommentsByArticleId);
+
+app.post("/api/articles/:articleId/comments", postCommentByArticleId);
 
 app.all("/*", (req, res) => {
   console.log(err);

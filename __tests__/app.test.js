@@ -93,7 +93,7 @@ describe("/api/articles?(...anyQuery)", () => {
   });
 });
 
-describe("/api/articles?topicQuery", () => {
+describe("/api/articles?topicQuery(edge-case)", () => {
   test("GET status 200 & correct articles from client topic queries", () => {
     return request(app)
       .get("/api/articles?topic=cats")
@@ -106,7 +106,7 @@ describe("/api/articles?topicQuery", () => {
         });
       });
   });
-  test.only("GET: status 400 & error message invalid topic", () => {
+  test("GET: status 400 & error message invalid topic", () => {
     return request(app)
       .get("/api/articles?topic=invalid")
       .expect(404)
@@ -123,20 +123,16 @@ describe("/api/articles?topicQuery", () => {
         expect(res.body.msg).toBe("Not found");
       });
   });
-  // test("GET: status 400 & error message invalid topic", () => {
-  //   return request(app)
-  //     .get("/api/articles?topic=invalid")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Bad request");
-  //     });
-  // });
-  // test("GET: status 400 & error message invalid topic", () => {
-  //   return request(app)
-  //     .get("/api/articles?topic=invalid")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Bad request");
-  //     });
-  // });
+});
+
+describe.only("/api/:article_id/comments", () => {
+  test("GET status 200 & comments of the article id from the client", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+        expect(res.body).toHaveLength(2);
+      });
+  });
 });

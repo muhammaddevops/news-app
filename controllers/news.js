@@ -3,6 +3,8 @@ const {
   selectArticleById,
   updateArticleById,
   selectQueryArticles,
+  selectCommentsByArticleId,
+  postCommentByArticleId,
 } = require("../models/news");
 
 exports.getOK = (req, res) => {
@@ -66,5 +68,28 @@ exports.getQueryArticles = (req, res, next) => {
         return Promise.reject({ status: 404, msg: "Not found" });
       }
     })
+    .catch((err) => next(err));
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { articleId } = req.params;
+
+  selectCommentsByArticleId(articleId)
+    .then((comments) => {
+      if (comments.length > 0) {
+        res.status(200).send(comments);
+      } else {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
+    })
+    .catch((err) => next(err));
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { articleId } = req.params;
+  const { comment } = req.body;
+
+  postCommentByArticleId(articleId, comment)
+    .then((comment) => {})
     .catch((err) => next(err));
 };
