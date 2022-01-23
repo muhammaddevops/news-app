@@ -137,7 +137,7 @@ describe("/api/:article_id/comments", () => {
   });
 });
 
-describe.only("/api/:article_id/comments", () => {
+describe("/api/:article_id/comments", () => {
   test("POST status 201 for comment object with username (from users table) & body & article id from the client", () => {
     const testComment = {
       username: "rogersop",
@@ -163,13 +163,34 @@ describe.only("/api/:article_id/comments", () => {
       username: "rogersop",
       body: "",
     };
-
     return request(app)
       .post("/api/articles/1/comments")
       .send(testComment)
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Bad request");
+        expect(res.body).toEqual({ msg: "Bad request" });
+      });
+  });
+});
+
+describe.only("/api/comments/:commentId", () => {
+  test("DELETE: status 200 & deleted comment", () => {
+    return request(app)
+      .delete("/api/comments/2")
+      .expect(200)
+      .then((res) => {
+        console.log(res.body.deleted);
+        expect(res.body.deleted).toBeInstanceOf(Array);
+        expect(res.body.deleted).toHaveLength(1);
+        res.body.deleted.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: 2,
+            author: "butter_bridge",
+            article_id: 1,
+            votes: 14,
+            body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+          });
+        });
       });
   });
 });

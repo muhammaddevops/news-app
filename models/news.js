@@ -116,7 +116,7 @@ exports.selectCommentsByArticleId = (articleId) => {
   });
 };
 
-exports.postCommentByArticleId = (articleId, username, body) => {
+exports.insertCommentByArticleId = (articleId, username, body) => {
   if (!username || !body) {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
@@ -128,5 +128,17 @@ exports.postCommentByArticleId = (articleId, username, body) => {
 
   return db.query(queryString).then((response) => {
     return response.rows[0];
+  });
+};
+
+exports.removeCommentByCommentId = (commentId) => {
+  console.log(commentId);
+  let sqlString = `DELETE FROM comments WHERE comment_id = %L RETURNING *`;
+  let queryValues = [commentId];
+
+  const queryString = format(sqlString, ...queryValues);
+
+  return db.query(queryString).then((response) => {
+    return response.rows;
   });
 };

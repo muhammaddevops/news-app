@@ -4,7 +4,8 @@ const {
   updateArticleById,
   selectQueryArticles,
   selectCommentsByArticleId,
-  postCommentByArticleId,
+  insertCommentByArticleId,
+  removeCommentByCommentId,
 } = require("../models/news");
 
 exports.getOK = (req, res) => {
@@ -89,9 +90,19 @@ exports.postCommentByArticleId = (req, res, next) => {
   const { articleId } = req.params;
   const { username, body } = req.body;
 
-  postCommentByArticleId(articleId, username, body)
+  insertCommentByArticleId(articleId, username, body)
     .then((comment) => {
       return res.status(201).send({ comment });
+    })
+    .catch((err) => next(err));
+};
+
+exports.deleteCommentByCommentId = (req, res, next) => {
+  const { commentId } = req.params;
+
+  removeCommentByCommentId(commentId)
+    .then((deleted) => {
+      res.status(200).send({ deleted });
     })
     .catch((err) => next(err));
 };
