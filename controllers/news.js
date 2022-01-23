@@ -87,9 +87,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.postCommentByArticleId = (req, res, next) => {
   const { articleId } = req.params;
-  const { comment } = req.body;
+  const { username, body } = req.body;
 
-  postCommentByArticleId(articleId, comment)
-    .then((comment) => {})
+  postCommentByArticleId(articleId, username, body)
+    .then((comment) => {
+      return res.status(201).send({ comment });
+    })
     .catch((err) => next(err));
 };

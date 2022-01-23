@@ -125,7 +125,7 @@ describe("/api/articles?topicQuery(edge-case)", () => {
   });
 });
 
-describe.only("/api/:article_id/comments", () => {
+describe("/api/:article_id/comments", () => {
   test("GET status 200 & comments of the article id from the client", () => {
     return request(app)
       .get("/api/articles/3/comments")
@@ -133,6 +133,43 @@ describe.only("/api/:article_id/comments", () => {
       .then((res) => {
         expect(res.body).toBeInstanceOf(Array);
         expect(res.body).toHaveLength(2);
+      });
+  });
+});
+
+describe.only("/api/:article_id/comments", () => {
+  test("POST status 201 for comment object with username (from users table) & body & article id from the client", () => {
+    const testComment = {
+      username: "rogersop",
+      body: "Testy Testi Test",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(testComment)
+      .expect(201)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.comment).toMatchObject({
+          comment_id: 19,
+          author: "rogersop",
+          article_id: 3,
+          votes: 0,
+          body: "Testy Testi Test",
+        });
+      });
+  });
+  test("POST: status 400 & returns an error for no username or body fields", () => {
+    const testComment = {
+      username: "rogersop",
+      body: "",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad request");
       });
   });
 });

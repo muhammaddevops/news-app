@@ -3,7 +3,7 @@ const format = require("pg-format");
 
 exports.selectTopics = () => {
   return db.query(`SELECT * FROM topics;`).then((result) => {
-    return result.rows;
+    return response.rows;
   });
 };
 
@@ -18,7 +18,7 @@ exports.selectArticleById = (articleId) => {
       ;`,
       [articleId]
     )
-    .then((result) => result.rows[0]);
+    .then((response) => response.rows[0]);
 };
 
 exports.updateArticleById = (articleId, votes) => {
@@ -31,8 +31,8 @@ exports.updateArticleById = (articleId, votes) => {
 
     const queryString = format(sqlString, ...queryValues);
 
-    return db.query(queryString).then((results) => {
-      return results.rows[0];
+    return db.query(queryString).then((responses) => {
+      return responses.rows[0];
     });
   }
 };
@@ -99,8 +99,8 @@ exports.selectQueryArticles = (
 
     const queryString = format(sqlString, ...queryValues);
 
-    return db.query(queryString).then((results) => {
-      return results.rows;
+    return db.query(queryString).then((responses) => {
+      return responses.rows;
     });
   }
 };
@@ -111,9 +111,22 @@ exports.selectCommentsByArticleId = (articleId) => {
 
   const queryString = format(sqlString, ...queryValues);
 
-  return db.query(queryString).then((result) => {
-    return result.rows;
+  return db.query(queryString).then((response) => {
+    return response.rows;
   });
 };
 
-exports.postCommentByArticleId = (articleId, comment) => {};
+exports.postCommentByArticleId = (articleId, username, body) => {
+  if (!username || !body) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  let sqlString = `INSERT INTO comments (article_id, author, body) VALUES (%L, %L, %L) RETURNING *;`;
+  let queryValues = [articleId, username, body];
+
+  const queryString = format(sqlString, ...queryValues);
+
+  return db.query(queryString).then((response) => {
+    return response.rows[0];
+  });
+};
