@@ -11,13 +11,15 @@ describe("my server", () => {
   test("blank test", () => {});
 });
 
-describe("/api", () => {
-  test("GET: status 200 & 'all ok' message", () => {
+describe.only("/api", () => {
+  test("GET: status 200 & description of all endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
       .then((response) => {
-        expect(response.body.msg).toBe("all ok");
+        expect(response.res.text).toEqual(
+          '{"GET /api":{"description":"serves up a json representation of all the available endpoints of the api"},"GET /api/topics":{"description":"serves an array of all topics","queries":[],"exampleResponse":{"topics":[{"slug":"football","description":"Footie!"}]}},"GET /api/articles":{"description":"serves an array of all topics","queries":["author","topic","sort_by","order"],"exampleResponse":{"articles":[{"title":"Seafood substitutions are increasing","topic":"cooking","author":"weegembump","body":"Text from the article..","created_at":1527695953341}]}},"GET /api/articles/:articleId":{"description":"serves an article object when provided a valid article ID"},"GET /api/articles/:articleId/comments":{"description":"serves a comments object relating to an article when provided a valid article ID"},"POST /api/articles/:articleId/comments":{"description":"posts a comments object relating to an article when provided a valid body and article ID"},"DELETE /api/articles/:articleId/comments":{"description":"deletes a comments object relating to an article when provided a valid comment ID"}}'
+        );
       });
   });
 });
@@ -173,7 +175,7 @@ describe("/api/:article_id/comments", () => {
   });
 });
 
-describe.only("/api/comments/:commentId", () => {
+describe("/api/comments/:commentId", () => {
   test("DELETE: status 200 & deleted comment", () => {
     return request(app)
       .delete("/api/comments/2")
