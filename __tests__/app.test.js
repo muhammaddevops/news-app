@@ -17,9 +17,45 @@ describe.only("/api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        expect(response.res.text).toEqual(
-          '{"GET /api":{"description":"serves up a json representation of all the available endpoints of the api"},"GET /api/topics":{"description":"serves an array of all topics","queries":[],"exampleResponse":{"topics":[{"slug":"football","description":"Footie!"}]}},"GET /api/articles":{"description":"serves an array of all topics","queries":["author","topic","sort_by","order"],"exampleResponse":{"articles":[{"title":"Seafood substitutions are increasing","topic":"cooking","author":"weegembump","body":"Text from the article..","created_at":1527695953341}]}},"GET /api/articles/:articleId":{"description":"serves an article object when provided a valid article ID"},"GET /api/articles/:articleId/comments":{"description":"serves a comments object relating to an article when provided a valid article ID"},"POST /api/articles/:articleId/comments":{"description":"posts a comments object relating to an article when provided a valid body and article ID"},"DELETE /api/articles/:articleId/comments":{"description":"deletes a comments object relating to an article when provided a valid comment ID"}}'
-        );
+        console.log(response.body);
+        expect(response.body).toEqual({
+          "DELETE /api/articles/:articleId/comments": {
+            description:
+              "deletes a comments object relating to an article when provided a valid comment ID",
+          },
+          "GET /api": {
+            description:
+              "serves up a json representation of all the available endpoints of the api",
+          },
+          "GET /api/articles": {
+            description: "serves an array of all topics",
+            exampleResponse: {
+              articles: [
+                {
+                  author: "weegembump",
+                  body: "Text from the article..",
+                  created_at: 1527695953341,
+                  title: "Seafood substitutions are increasing",
+                  topic: "cooking",
+                },
+              ],
+            },
+            queries: ["author", "topic", "sort_by", "order"],
+          },
+          "GET /api/articles/:articleId": {
+            description:
+              "serves an article object when provided a valid article ID",
+          },
+          "GET /api/articles/:articleId/comments": {
+            description:
+              "serves a comments object relating to an article when provided a valid article ID",
+          },
+          "GET /api/topics": { description: "serves an array of all topics" },
+          "POST /api/articles/:articleId/comments": {
+            description:
+              "posts a comments object relating to an article when provided a valid body and article ID",
+          },
+        });
       });
   });
 });

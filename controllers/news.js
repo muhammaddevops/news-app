@@ -6,7 +6,6 @@ const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
   removeCommentByCommentId,
-  getApiDescriptions,
 } = require("../models/news");
 
 exports.getTopics = (req, res, next) => {
@@ -112,10 +111,6 @@ exports.getApiResponse = (req, res, next) => {
     },
     "GET /api/topics": {
       description: "serves an array of all topics",
-      queries: [],
-      exampleResponse: {
-        topics: [{ slug: "football", description: "Footie!" }],
-      },
     },
     "GET /api/articles": {
       description: "serves an array of all topics",
@@ -148,5 +143,5 @@ exports.getApiResponse = (req, res, next) => {
         "deletes a comments object relating to an article when provided a valid comment ID",
     },
   };
-  res.status(200).send(JSON.stringify(apiDescription));
+  res.status(200).send(apiDescription);
 };

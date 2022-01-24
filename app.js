@@ -17,14 +17,10 @@ app.use(express.json());
 app.get("/api", getApiResponse);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:articleId", getArticleById);
-
 app.patch("/api/articles/:articleId", patchArticleById);
 app.get("/api/articles", getQueryArticles);
-
 app.get("/api/articles/:articleId/comments", getCommentsByArticleId);
-
 app.post("/api/articles/:articleId/comments", postCommentByArticleId);
-
 app.delete("/api/comments/:commentId", deleteCommentByCommentId);
 
 app.all("/*", (req, res) => {
@@ -41,7 +37,11 @@ app.use((err, req, res, next) => {
 });
 app.use((err, req, res, next) => {
   console.log(err);
-  res.status(500).send({ msg: "Internal server error" });
+  res
+    .status(500)
+    .send({
+      msg: `Internal server error | REMEMBER Please add '/api' at the start of any link search`,
+    });
 });
 
 module.exports = app;
