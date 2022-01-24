@@ -14,6 +14,7 @@ const {
 
 app.use(express.json());
 
+app.get("/api", getApiResponse);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:articleId", getArticleById);
 
@@ -25,8 +26,6 @@ app.get("/api/articles/:articleId/comments", getCommentsByArticleId);
 app.post("/api/articles/:articleId/comments", postCommentByArticleId);
 
 app.delete("/api/comments/:commentId", deleteCommentByCommentId);
-
-app.get("/api", getApiResponse);
 
 app.all("/*", (req, res) => {
   console.log(err);
