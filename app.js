@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+app.use(cors());
 
 const {
   getTopics,
@@ -37,11 +39,9 @@ app.use((err, req, res, next) => {
 });
 app.use((err, req, res, next) => {
   console.log(err);
-  res
-    .status(500)
-    .send({
-      msg: `Internal server error | REMEMBER Please add '/api' at the start of any link search`,
-    });
+  res.status(500).send({
+    msg: `Internal server error | REMEMBER Please add '/api' at the start of any link search`,
+  });
 });
 
 module.exports = app;
