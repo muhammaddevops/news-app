@@ -40,7 +40,8 @@ exports.updateArticleById = (articleId, votes) => {
 exports.selectQueryArticles = (
   sort_by = "created_at",
   order = "DESC",
-  topic
+  topic,
+  article_id
 ) => {
   const allowedSortBys = [
     "title",
@@ -49,6 +50,7 @@ exports.selectQueryArticles = (
     "body",
     "created_at",
     "votes",
+    "article_id",
   ];
   const allowedOrder = ["ASC", "DESC"];
   if (!allowedSortBys.includes(sort_by)) {
@@ -65,6 +67,11 @@ exports.selectQueryArticles = (
     if (topic) {
       queryValues.push(topic);
       sqlString += ` WHERE topic ILIKE %L`;
+    }
+
+    if (article_id) {
+      queryValues.push(article_id);
+      sqlString += ` WHERE article_id = %L`;
     }
 
     sqlString += ` GROUP BY articles.article_id`;
