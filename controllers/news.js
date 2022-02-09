@@ -54,9 +54,9 @@ exports.patchArticleById = (req, res, next) => {
 };
 
 exports.getQueryArticles = (req, res, next) => {
-  const { sort_by, order, topic, article_id } = req.query;
+  const { sort_by, order, topic } = req.query;
 
-  selectQueryArticles(sort_by, order, topic, article_id)
+  selectQueryArticles(sort_by, order, topic)
     .then((articles) => {
       console.log(articles);
       if (articles.length > 0) {
