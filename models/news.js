@@ -49,6 +49,7 @@ exports.selectQueryArticles = (
     "body",
     "created_at",
     "votes",
+    "comment_count",
   ];
   const allowedOrder = ["ASC", "DESC"];
   if (!allowedSortBys.includes(sort_by)) {
@@ -83,6 +84,9 @@ exports.selectQueryArticles = (
       sqlString += ` ORDER BY %I`;
     } else if (sort_by === "author") {
       queryValues.push(`author`);
+      sqlString += ` ORDER BY %I`;
+    } else if (sort_by === "comment_count") {
+      queryValues.push(`comment_count`);
       sqlString += ` ORDER BY %I`;
     } else {
       queryValues.push(`created_at`);
