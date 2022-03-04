@@ -44,14 +44,6 @@ Change the current working directory to the location where you want the cloned d
 
 Type git clone, and then paste the URL you copied earlier.
 
-$ git clone https://github.com/YOUR-USERNAME/news-app.git
-Press Enter to create your local clone.
-
-The result should look something like the below:
-
-$ git clone https://github.com/YOUR-USERNAME/news-app.git
-> Cloning into `Spoon-Knife`...
-> remote: Counting objects: 10, done.
-> remote: Compressing objects: 100% (8/8), done.
-> remove: Total 10 (delta 1), reused 10 (delta 1)
-> Unpacking objects: 100% (10/10), done.
+- ```$ git clone {paste the URL of this repository}```. This will clone it.
+- Navigate (using the ```cd``` command) into the new folder and type. ```$ npm install``` This installs the required dependencies.
+- Finally, to run the React project type ```$ npm start```.
